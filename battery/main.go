@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -26,7 +25,6 @@ var (
 func main() {
 	out, err := exec.Command("acpi", "b").Output()
 	if err != nil {
-		log.Fatal(err)
 		panic(err)
 	}
 
