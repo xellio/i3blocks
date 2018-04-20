@@ -50,14 +50,16 @@ func main() {
 		icon, color := iconAndColor(percent)
 
 		fullText = fmt.Sprintf("%s <span foreground=\"%s\">%s %s%s</span>", fullText, color, icon, batPercent, "%")
+		shortText = fmt.Sprintf("%s <span foreground=\"%s\">%s%s</span>", shortText, color, batPercent, "%")
 	}
 
 	if !discharging {
 		fullText = fmt.Sprintf("%s %s", iconCharging, fullText)
+		shortText = fmt.Sprintf("%s %s", iconCharging, shortText)
 	}
 
 	fmt.Println(strings.TrimSpace(fullText))
-	fmt.Println(shortText)
+	fmt.Println(strings.TrimSpace(shortText))
 	fmt.Println(color)
 }
 
