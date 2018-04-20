@@ -18,6 +18,7 @@ var (
 )
 
 func main() {
+
 	now := time.Now()
 	hour := now.Hour()
 
