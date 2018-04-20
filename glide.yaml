@@ -1,0 +1,3 @@
+package: github.com/xellio/i3blocks
+import:
+- package: github.com/xellio/gocal
