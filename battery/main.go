@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"os/exec"
+)
 
 var (
 	iconFull    = ""
@@ -18,5 +22,9 @@ var (
 )
 
 func main() {
-	fmt.Println("TODO")
+	out, err := exec.Command("acpi", "b").Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(out))
 }
