@@ -10,6 +10,7 @@ import (
 
 func main() {
 	calendar := gocal.Cal{
+		NoFormat:   true,
 		HideHeader: true,
 	}
 	cal, err := calendar.Output()

@@ -11,7 +11,7 @@ in your i3blocks.conf:
 ```
 # Date Time
 [time]
-command=/path/to/binary/i3blocks/i3b_time
+command=/path/to/binary/i3blocks/i3b_time; bash -c 'if [ -n "$BLOCK_BUTTON" ]; then /path/to/binary/i3blocks/i3b_calendar; fi';
 interval=1
 ```
 
