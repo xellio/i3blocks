@@ -33,9 +33,15 @@ func main() {
 	var fullText string
 	var shortText string
 	var color string
+	var discharging bool
 
 	for _, bat := range lines {
-		values := bytes.Split(bat, []byte(":"))
+		values := bytes.Split(bat, []byte(","))
+
+		if (string(values[0][len(values[0])-11:])) == "Discharging" {
+			discharging = true
+		}
+
 		batPercent := strings.Trim(string(values[1][len(values[1])-4:]), " %")
 		percent, err := strconv.Atoi(batPercent)
 		if err != nil {
@@ -46,7 +52,11 @@ func main() {
 		fullText = fmt.Sprintf("%s <span foreground=\"%s\">%s %s%s</span>", fullText, color, icon, batPercent, "%")
 	}
 
-	fmt.Println(fullText)
+	if !discharging {
+		fullText = fmt.Sprintf("%s %s", iconCharging, fullText)
+	}
+
+	fmt.Println(strings.TrimSpace(fullText))
 	fmt.Println(shortText)
 	fmt.Println(color)
 }
