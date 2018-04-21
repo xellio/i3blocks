@@ -36,13 +36,14 @@ func main() {
 	var discharging bool
 
 	for _, bat := range lines {
+
 		values := bytes.Split(bat, []byte(","))
 
 		if (string(values[0][len(values[0])-11:])) == "Discharging" {
 			discharging = true
 		}
 
-		batPercent := strings.Trim(string(values[1][len(values[1])-4:]), " %")
+		batPercent := strings.Trim(string(values[1]), " %")
 		percent, err := strconv.Atoi(batPercent)
 		if err != nil {
 			continue
