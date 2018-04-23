@@ -18,18 +18,33 @@ func main() {
 		panic(err)
 	}
 
-	path, err := exec.LookPath("notify-send")
-	if err != nil {
-		panic(err)
-	}
-	//  cmd := exec.Command(path, time.Now().Month().String(), cal)
 	title := fmt.Sprintf("%s %d", time.Now().Month().String(), time.Now().Year())
-	cmd := exec.Command(path, title, fmt.Sprint(cal))
 
-	if err = cmd.Start(); err != nil {
-		panic(err)
+	path, err := exec.LookPath("yad")
+	if err != nil {
+		path, err = exec.LookPath("notify-send")
+		if err != nil {
+			panic(err)
+		}
+		err = notify(path, title, cal)
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		err = notify(path, "--no-buttons", "--mouse", "--close-on-unfocus", "--skip-taskbar", "--calendar")
+		if err != nil {
+			panic(err)
+		}
 	}
-	if err = cmd.Wait(); err != nil {
-		panic(err)
+
+}
+
+func notify(path string, args ...string) error {
+	cmd := exec.Command(path, args...)
+
+	err := cmd.Start()
+	if err != nil {
+		return err
 	}
+	return cmd.Wait()
 }
