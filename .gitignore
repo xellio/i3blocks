@@ -1,5 +1,6 @@
 tags
 glide.lock
+Gopkg.lock
 vendor/
 i3b_time
 i3b_battery
