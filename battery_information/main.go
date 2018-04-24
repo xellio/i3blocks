@@ -1,37 +1,40 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os/exec"
-	"time"
-
-	"github.com/xellio/gocal"
 )
 
 func main() {
-	calendar := gocal.Cal{
-		NoFormat:   true,
-		HideHeader: true,
-	}
-	cal, err := calendar.Output()
+	path, err := exec.LookPath("acpi")
 	if err != nil {
 		panic(err)
 	}
 
-	title := fmt.Sprintf("%s %d", time.Now().Month().String(), time.Now().Year())
+	out, err := exec.Command(path, "-V").Output()
+	if err != nil {
+		panic(err)
+	}
 
-	path, err := exec.LookPath("yad")
+	lines := bytes.Split(out[:len(out)-1], []byte("\n"))
+
+	for _, line := range lines {
+		fmt.Println(string(line))
+	}
+
+	path, err = exec.LookPath("yad")
 	if err != nil {
 		path, err = exec.LookPath("notify-send")
 		if err != nil {
 			panic(err)
 		}
-		err = notify(path, title, cal)
+		err = notify(path, "", string(out))
 		if err != nil {
 			panic(err)
 		}
 	} else {
-		err = notify(path, "--no-buttons", "--mouse", "--close-on-unfocus", "--skip-taskbar", "--calendar")
+		err = notify(path, "--no-buttons", "--mouse", "--close-on-unfocus", "--skip-taskbar", "--text="+string(out))
 		if err != nil {
 			panic(err)
 		}

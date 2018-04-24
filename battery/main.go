@@ -23,7 +23,12 @@ var (
 )
 
 func main() {
-	out, err := exec.Command("acpi", "b").Output()
+	path, err := exec.LookPath("acpi")
+	if err != nil {
+		panic(err)
+	}
+
+	out, err := exec.Command(path, "-b").Output()
 	if err != nil {
 		panic(err)
 	}
