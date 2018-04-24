@@ -4,7 +4,13 @@ GO      = go
 GLIDE_VERSION := $(shell glide --version 2>/dev/null)
 DEP_VERSION := $(shell dep version 2>/dev/null)
 
-all: clean $(PREFIX)_time $(PREFIX)_calendar $(PREFIX)_battery
+YAD_VERSION := $(shell yad --version 2>/dev/null)
+
+all: dep_check clean \
+	$(PREFIX)_time \
+	$(PREFIX)_calendar \
+	$(PREFIX)_battery \
+	$(PREFIX)_battery_information
 
 $(PREFIX)_time: 
 	$(GO) build -ldflags="-s -w" -o $(PREFIX)_time ./time/main.go
@@ -15,8 +21,20 @@ $(PREFIX)_calendar: vendor
 $(PREFIX)_battery:
 	$(GO) build -ldflags="-s -w" -o $(PREFIX)_battery ./battery/main.go
 
+$(PREFIX)_battery_information:
+	$(GO) build -ldflags="-s -w" -o $(PREFIX)_battery_information ./battery_information/main.go
+
+dep_check:
+ifndef YAD_VERSION
+	$(error "yad (Yet another dialoging program) is not available please install yad")
+endif
+
 clean:
-	rm -f $(PREFIX)_time $(PREFIX)_calendar $(PREFIX)_battery
+	rm -f \
+		$(PREFIX)_time \
+		$(PREFIX)_calendar \
+		$(PREFIX)_battery \
+		$(PREFIX)_battery_information
 
 vendor:
 ifdef DEP_VERSION
@@ -27,4 +45,4 @@ else
 	go get .
 endif
 
-.PHONY:all
+.PHONY:all dep_check
