@@ -25,19 +25,17 @@ func main() {
 
 	path, err = exec.LookPath("yad")
 	if err != nil {
-		path, err = exec.LookPath("notify-send")
-		if err != nil {
-			panic(err)
-		}
-		err = notify(path, "", string(out))
-		if err != nil {
-			panic(err)
-		}
-	} else {
-		err = notify(path, "--no-buttons", "--mouse", "--close-on-unfocus", "--skip-taskbar", "--text="+string(out))
-		if err != nil {
-			panic(err)
-		}
+		panic(err)
+	}
+	err = notify(path,
+		"--no-buttons",
+		"--mouse",
+		"--close-on-unfocus",
+		"--skip-taskbar",
+		"--text="+string(out),
+	)
+	if err != nil {
+		panic(err)
 	}
 
 }
