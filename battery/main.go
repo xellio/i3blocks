@@ -3,9 +3,10 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"os/exec"
 	"strconv"
 	"strings"
+
+	"github.com/xellio/tools/acpi"
 )
 
 var (
@@ -23,12 +24,8 @@ var (
 )
 
 func main() {
-	path, err := exec.LookPath("acpi")
-	if err != nil {
-		panic(err)
-	}
 
-	out, err := exec.Command(path, "-b").Output()
+	out, err := acpi.Battery()
 	if err != nil {
 		panic(err)
 	}
