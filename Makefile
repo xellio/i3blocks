@@ -15,10 +15,10 @@ all: dep_check clean \
 $(PREFIX)_time: 
 	$(GO) build -ldflags="-s -w" -o $(PREFIX)_time ./time/main.go
 
-$(PREFIX)_calendar: vendor
+$(PREFIX)_calendar:
 	$(GO) build -ldflags="-s -w" -o $(PREFIX)_calendar ./calendar/main.go
 
-$(PREFIX)_battery:
+$(PREFIX)_battery: vendor
 	$(GO) build -ldflags="-s -w" -o $(PREFIX)_battery ./battery/main.go
 
 $(PREFIX)_battery_information:
@@ -30,6 +30,7 @@ ifndef YAD_VERSION
 endif
 
 clean:
+	rm -rf vendor
 	rm -f \
 		$(PREFIX)_time \
 		$(PREFIX)_calendar \
