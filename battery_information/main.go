@@ -1,38 +1,47 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"os/exec"
+	"strings"
+
+	"github.com/xellio/tools/acpi"
 )
 
+var path string
+
 func main() {
-	path, err := exec.LookPath("acpi")
+
+	path, err := exec.LookPath("yad")
 	if err != nil {
 		panic(err)
 	}
 
-	out, err := exec.Command(path, "-V").Output()
+	information, err := acpi.Everything()
 	if err != nil {
 		panic(err)
 	}
 
-	lines := bytes.Split(out[:len(out)-1], []byte("\n"))
+	var output string
 
-	for _, line := range lines {
-		fmt.Println(string(line))
+	for _, bi := range information.BatteryInformation {
+		output = fmt.Sprintf("%s\nBattery %d: %s\nLevel: %d", output, bi.Number, bi.Status, bi.Level)
 	}
 
-	path, err = exec.LookPath("yad")
-	if err != nil {
-		panic(err)
+	for _, ai := range information.AdapterInformation {
+		output = fmt.Sprintf("%s\nAdapter %d: %s", output, ai.Number, ai.Status)
 	}
+
+	for _, ti := range information.ThermalInformation {
+		output = fmt.Sprintf("%s\nThermal %d: %f%s", output, ti.Number, ti.Degree, ti.Unit)
+	}
+
 	err = notify(path,
 		"--no-buttons",
 		"--mouse",
 		"--close-on-unfocus",
 		"--skip-taskbar",
-		"--text="+string(out),
+		"--text="+strings.TrimSpace(output),
 	)
 	if err != nil {
 		panic(err)
