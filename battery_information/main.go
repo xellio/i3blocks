@@ -33,7 +33,7 @@ func main() {
 	}
 
 	for _, ti := range information.ThermalInformation {
-		output = fmt.Sprintf("%s\nThermal %d: %f%s", output, ti.Number, ti.Degree, ti.Unit)
+		output = fmt.Sprintf("%s\nThermal %d: %.2f%s", output, ti.Number, ti.Degree, ti.Unit)
 	}
 
 	err = notify(path,
