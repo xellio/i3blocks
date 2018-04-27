@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/xellio/tools/acpi"
@@ -25,35 +23,26 @@ var (
 
 func main() {
 
-	out, err := acpi.Battery()
+	batteryInformation, err := acpi.Battery()
 	if err != nil {
 		panic(err)
 	}
-
-	lines := bytes.Split(out[:len(out)-1], []byte("\n"))
 
 	var fullText string
 	var shortText string
 	var color string
 	var discharging bool
 
-	for _, bat := range lines {
-
-		values := bytes.Split(bat, []byte(","))
-
-		if (string(values[0][len(values[0])-11:])) == "Discharging" {
+	for _, battery := range batteryInformation {
+		if battery.Status == "Discharging" {
 			discharging = true
 		}
 
-		batPercent := strings.Trim(string(values[1]), " %")
-		percent, err := strconv.Atoi(batPercent)
-		if err != nil {
-			continue
-		}
-		icon, color := iconAndColor(percent)
+		icon, color := iconAndColor(battery.Level)
 
-		fullText = fmt.Sprintf("%s <span foreground=\"%s\">%s %s%s</span>", fullText, color, icon, batPercent, "%")
-		shortText = fmt.Sprintf("%s <span foreground=\"%s\">%s%s</span>", shortText, color, batPercent, "%")
+		fullText = fmt.Sprintf("%s <span foreground=\"%s\">%s %d%s</span>", fullText, color, icon, battery.Level, "%")
+		shortText = fmt.Sprintf("%s<span foreground=\"%s\">%d%s</span>", shortText, color, battery.Level, "%")
+
 	}
 
 	if !discharging {
