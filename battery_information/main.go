@@ -53,8 +53,10 @@ func appendBatteryInformation(output string, information []*acpi.BatteryInformat
 		}
 		return output + "\n"
 	}
-
-	return fmt.Sprintf("%s\nLevel: %d\n", output, information[0].Level)
+	if len(information) == 1 {
+		return fmt.Sprintf("%s\nLevel: %d\n", output, information[0].Level)
+	}
+	return output
 }
 
 func appendAdapterInformation(output string, information []*acpi.AdapterInformation) string {
@@ -64,7 +66,10 @@ func appendAdapterInformation(output string, information []*acpi.AdapterInformat
 		}
 		return output + "\n"
 	}
-	return fmt.Sprintf("%s\nAdapter: %s\n", output, information[0].Status)
+	if len(information) == 1 {
+		return fmt.Sprintf("%s\nAdapter: %s\n", output, information[0].Status)
+	}
+	return output
 }
 
 func appendThermalInformation(output string, information []*acpi.ThermalInformation) string {
@@ -74,7 +79,10 @@ func appendThermalInformation(output string, information []*acpi.ThermalInformat
 		}
 		return output + "\n"
 	}
-	return fmt.Sprintf("%s\nThermal: %.2f%s", output, information[0].Degree, information[0].Unit)
+	if len(information) == 1 {
+		return fmt.Sprintf("%s\nThermal: %.2f%s", output, information[0].Degree, information[0].Unit)
+	}
+	return output
 }
 
 func notify(path string, args ...string) error {
