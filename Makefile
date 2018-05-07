@@ -6,7 +6,7 @@ DEP_VERSION := $(shell dep version 2>/dev/null)
 
 YAD_VERSION := $(shell yad --version 2>/dev/null)
 
-all: dep_check clean \
+all: clean \
 	$(PREFIX)_time \
 	$(PREFIX)_calendar \
 	$(PREFIX)_battery \
@@ -15,13 +15,13 @@ all: dep_check clean \
 $(PREFIX)_time: 
 	$(GO) build -ldflags="-s -w" -o $(PREFIX)_time ./time/main.go
 
-$(PREFIX)_calendar:
+$(PREFIX)_calendar: dep_check
 	$(GO) build -ldflags="-s -w" -o $(PREFIX)_calendar ./calendar/main.go
 
 $(PREFIX)_battery: vendor
 	$(GO) build -ldflags="-s -w" -o $(PREFIX)_battery ./battery/main.go
 
-$(PREFIX)_battery_information:
+$(PREFIX)_battery_information: dep_check
 	$(GO) build -ldflags="-s -w" -o $(PREFIX)_battery_information ./battery_information/main.go
 
 dep_check:
